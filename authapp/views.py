@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.core.mail import send_mail
 from django.shortcuts import render, HttpResponseRedirect
-from authapp.forms import UserLoginForm, UserRegisterForm, UserProfileForm
+from authapp.forms import UserLoginForm, UserRegisterForm, UserProfileForm, ShopUserProfileEditForm
 from django.contrib import auth, messages
 from django.urls import reverse
 
@@ -23,7 +23,7 @@ def verify(request, email, activation_key):
         user = User.objects.get(email=email)
         if user.activation_key == activation_key and not user.is_activation_key_expired():
             user.is_active = True
-            user.activation_key = None
+            # user.activation_key = None
             user.save()
             auth.login(request, user)
         return render(request, 'authapp/verification.html')
@@ -69,11 +69,13 @@ def register(request):
 def profile(request):
     if request.method == 'POST':
         form = UserProfileForm(data=request.POST, files=request.FILES, instance=request.user)
-        if form.is_valid():
+        profile_form = ShopUserProfileEditForm(data=request.POST, instance=request.user.shopuserprofile)
+        if form.is_valid() and profile_form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('auth:profile'))
     else:
         form = UserProfileForm(instance=request.user)
+        profile_form = ShopUserProfileEditForm(instance=request.user.shopuserprofile)
 
     # total_quantity =0
     # for basket in Basket.objects.filter(user = request.user):
@@ -82,8 +84,10 @@ def profile(request):
     # for basket in Basket.objects.filter(user=request.user):
     #     total_sum+=basket.sum()
     context = {
-        'title': 'Профиль', 'form': form,
+        'title': 'Профиль',
+        'form': form,
         'baskets': Basket.objects.filter(user=request.user),
+        'profile_form': profile_form,
         # 'total_quantity': total_quantity,
         # 'total_sum': total_sum,
         # 'total_quantity': sum(basket.quantity for basket in Basket.objects.filter(user = request.user)),
