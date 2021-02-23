@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 
 # Create your models here.
+from basketapp.models import Basket
 from mainapp.models import Product
 
 
@@ -65,3 +66,7 @@ class OrderItem(models.Model):
     @property
     def get_product_cost(self):
         return self.product.price * self.quantity
+
+    @staticmethod
+    def get_item(pk):
+        return Basket.objects.filter(pk=pk).first()
