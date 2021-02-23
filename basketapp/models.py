@@ -38,6 +38,10 @@ class Basket(models.Model):
     #     self.product.save()
     #     super().delete()
 
+    @staticmethod
+    def get_item(pk):
+        return Basket.objects.filter(pk=pk).first()
+
 
 
 
