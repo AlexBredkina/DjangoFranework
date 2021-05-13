@@ -41,4 +41,15 @@ window.onload = function() {
     };
 
 
+    $('.formset_row').formset({
+        addText: 'добавить товар',
+        deleteText:'удалить товар',
+        prefix: 'orderitems',
+        removed: deleteOrderItem
+    });
+
+
+    function deleteOrderItem(){
+    };
+
 }
