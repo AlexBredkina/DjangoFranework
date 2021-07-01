@@ -7,7 +7,7 @@ window.onload = function() {
     var order_total_quantity = parseInt($('.order_total_quantity').text())||0;
     var order_total_price = parseFloat($('.order_total_cost').text().replace(',','.'))||0;
 
-    for (var i=0, i<TOTAL_FORMS;i++) {
+    for (var i=0; i<TOTAL_FORMS;i++) {
         _quantity = parseInt($('input[name = orderitems-'+i+'-quantity]').val());
         _price = parseFloat($('span.orderitems-'+i+'-price').text().replace(',','.'));
 
