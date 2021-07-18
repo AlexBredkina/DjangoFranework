@@ -29,6 +29,16 @@ window.onload = function() {
         }
         orderSummaryUpdate(price_arr[orderitem_num], delta_quantity);
     });
+    $('.order_form').on('click', 'input[type="number"]', function () {
+        var target = event.target;
+        orderitem_num = parseInt(target.name.replace('orderitems-', '').replace('-quantity', ''));
+        if (price_arr[orderitem_num]) {
+            orderitem_quantity = parseInt(target.value);
+            delta_quantity = orderitem_quantity - quantity_arr[orderitem_num];
+            quantity_arr[orderitem_num] = orderitem_quantity;
+            orderSummaryUpdate(price_arr[orderitem_num], delta_quantity);
+        }
+    });
 
     function orderSummaryUpdate(orderitem_price, delta_quantity){
         delta_cost = orderitem_price*delta_quantity;
@@ -49,7 +59,12 @@ window.onload = function() {
     });
 
 
-    function deleteOrderItem(){
-    };
+    function deleteOrderItem(row){
+        var target_name = row[0].querySelector('input[type=number]').name;
+        orderitem_num=parseInt(target_name.replace('orderitems-', '').replace('-quantity', ''));
+        delta_quantity= - quantity_arr[orderitem_num];
+        orderSummaryUpdate(price_arr[orderitem_num],delta_quantity);
+
+    }
 
 }
